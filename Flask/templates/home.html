@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Dashboard | Euphonic</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='img/site.webmanifest') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css"
+        integrity="sha512-SbiR/eusphKoMVVXysTKG/7VseWii+Y3FdHrt0EpKgpToZeemhqHeZeLWLhJutz/2ut2Vw1uQEj2MbRF+TVBUA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.min.js"
+        integrity="sha512-1/RvZTcCDEUjY/CypiMz+iqqtaoQfAITmNSJY17Myp4Ms5mdxPS5UV7iOfdZoxcGhzFbOm6sntTKJppjvuhg4g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.4/font/bootstrap-icons.min.css"
+        integrity="sha512-yU7+yXTc4VUanLSjkZq+buQN3afNA4j2ap/mxvdr440P5aW9np9vIr2JMZ2E5DuYeC9bAoH9CuCR7SJlXAa4pg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+
+    <!-- Top menu -->
+    <nav class="navbar navbar-dark fixed-top navbar-expand-md navbar-no-bg">
+        <div class="container">
+            <div class="navbar-text mr-5">
+                <span>Hello {{ username }}!</span>
+            </div>
+            <a class="navbar-brand euphonic-custom-font" href="{{ url_for('home') }}">Euphonic</a>
+            <form action="{{ url_for('logout') }}" method="POST">
+                <button type="submit" class="bttn btn-secondary navbar-bttn">Logout</button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- Body -->
+    <div class="section mt-3">
+        <div class="container justify-content-around">
+            <div class="row justify-content-around">
+                <div class="col">
+                    <div class="text-center align-self-center">
+                        <div class="card-3d-wrap-friends mx-auto">
+                            <div class="card-friends">
+                                <div class="center-wrap">
+                                    <div class="section text-center">
+                                        <h4 class="mb-1 pb-3">Find your Friends!</h4>
+                                        <form action="{{ url_for('addFriendRoute') }}">
+                                            <div class="form-group">
+                                                <input type="username" name="friend_username" class="form-style"
+                                                    placeholder="Friend's username" id="friend_username"
+                                                    autocomplete="off">
+                                                <i class="input-icon uil uil-at"></i>
+                                            </div>
+                                            <input type="submit" class="bttn mt-4" value="Send Request">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if friend_request_data %}
+                <div class="col">
+                    <div class="text-center align-self-center">
+                        <div class="card-3d-wrap-friends mx-auto">
+                            <div class="card-friends">
+                                <div class="center-wrap">
+                                    <div class="section text-center">
+                                        <h3>Friend Requests</h3>
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">User</th>
+                                                    <th scope="col">Accept</th>
+                                                    <th scope="col">Deny</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for key,friend in friend_request_data.items() %}
+                                                <tr>
+                                                    <td class="align-middle">{{ loop.index }}</td>
+                                                    <td class="align-middle"><b>{{ friend['username'] }}</td>
+                                                    <td class="align-middle">
+                                                        <a href="{{ url_for('addFriendRoute', friend_username=friend['username']) }}"
+                                                            class="btn btn-success"><i
+                                                                class="bi bi-person-fill-add"></i><span
+                                                                class="visually-hidden">Accept</span></a>
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <a href="{{ url_for('deleteFriendRoute', friend_username=friend['username']) }}"
+                                                            class="btn btn-danger"><i
+                                                                class="bi bi-person-fill-slash"></i><span
+                                                                class="visually-hidden">Deny</span></a>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="row justify-content-around mt-5">
+                <div class="col mx-5 user justify-content-around">
+                    <div class="section text-center align-self-center">
+                        <h3 class="text-center mb-4">LEADERBOARD</h3>
+                        <table class="table text-center">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">Score</th>
+                                    <th scope="col">Username</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for key,score in leaderboard.items() %}
+                                <tr>
+                                    <td class="align-middle">{{ loop.index }}</td>
+                                    <td class="align-middle">{{ score['user1'] }}</td>
+                                    <td class="align-middle">{{ score['score'] }}</td>
+                                    <td class="align-middle">{{ score['user2'] }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col mx-5 user justify-content-around">
+                    <div class="section text-center">
+                        <h3>Friends</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Friend</th>
+                                    <th scope="col">Last Listen</th>
+                                    <th scope="col">Score</th>
+                                    <th scope="col">Compare</th>
+                                    <th scope="col">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for key,friend in friend_data.items() %}
+                                <tr>
+                                    <td class="align-middle">{{ loop.index }}</td>
+                                    <td class="align-middle"><b>{{ friend['username'] }}</td>
+                                    {% if 'track_href' in friend %}
+                                    <td class="align-middle"><a href="{{ friend['track_href'] }}" class="link">{{
+                                            friend['track'] }}</a></td>
+                                    {% else %}
+                                    <td class="align-middle">{{ friend['track'] }}</td>
+                                    {% endif %}
+                                    <td class="align-middle">{{ friend['score'] }}</td>
+                                    <td class="align-middle">
+                                        <a href="{{ url_for('compareRoute', friend_username=friend['username']) }}"
+                                            class="btn btn-primary"><i class="bi bi-person-lines-fill"></i><span
+                                                class="visually-hidden">Compare</span></a>
+                                    </td>
+                                    <td class="align-middle">
+                                        <a href="{{ url_for('deleteFriendRoute', friend_username=friend['username']) }}"
+                                            class="btn btn-danger"><i class="bi bi-person-fill-x"></i><span
+                                                class="visually-hidden">Delete</span></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-center">
+                    <h5 class="modal-title error-modal-title text-center" id="errorModalLabel">Error Message
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body error-modal-body text-center">
+                    {{ msg }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if msg %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            var myModal = document.getElementById("errorModal");
+            var myModalInstance = new bootstrap.Modal(myModal);
+            myModalInstance.show();
+        });
+    </script>
+    {% endif %}
+</body>
+
+</html>
